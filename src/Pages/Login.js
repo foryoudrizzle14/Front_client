@@ -44,19 +44,6 @@ function LogIn() {
         console.log(err);
       }
 
-
-      // axios
-      //     .post(
-      //       "http://localhost:3001", // 미리 약속한 주소
-      //       { email:email.value, password:password.value }, // 서버가 필요로 하는 데이터를 넘겨주고,
-      //       { headers: {} } // 누가 요청했는 지 알려줍니다. (config에서 해요!)
-      //     )
-      //     .then(function (response) {
-      //       console.log(response);
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error);
-      //     });
     } else {
       alert("Please enter your email and password.");
       return;
