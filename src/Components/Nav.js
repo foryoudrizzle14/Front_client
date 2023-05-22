@@ -47,6 +47,7 @@ function Header() {
             <Link to="/login">
               <button>로그인</button>
             </Link>
+        
           </>
         )}
       </HeaderItems>

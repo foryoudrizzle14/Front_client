@@ -13,7 +13,7 @@ function Header() {
 export default Header;
 
 const StHeaderBox = styled.div`
-  padding: 10px;
-  margin: 15px;
+  padding: 15px;
+  margin: 20px;
   border: 3px solid black;
 `;

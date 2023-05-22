@@ -5,6 +5,7 @@ import GlobalStyle from '../GlobalStyle';
 import styled from 'styled-components';
 import Posts from '../Pages/Posts';
 
+
 function Main() {
   return (
     <>

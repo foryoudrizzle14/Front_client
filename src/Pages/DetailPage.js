@@ -23,7 +23,7 @@ function Test() {
     console.log('Submitted comment:', comment);
     setComment('');
   };
-
+  
   return (
     <>
       <GlobalStyle />
