@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { AuthApi } from "../Shared/Api";
+import { AuthApi } from "../shared/Api";
 
 //정규식 적용
 const emailRegex =
-  /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-const nicknameRegex = /^[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,20}$/;
-const passwordRegex = /^.{4,}$/;
+  /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z-]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+const nicknameRegex = /[\w\Wㄱ-ㅎㅏ-ㅣ가-힣]{2,20}$/;
+const passwordRegex = /.{4,}$/;
 
 const alertMessage = {
   emailErr: "이메일 규칙에 어긋납니다!",
@@ -18,7 +18,7 @@ const alertMessage = {
 
 function Signup() {
   const [email, setEmail] = useState({ value: "", err: null });
-  const [nickname, setNickname] = useState({ value: "", err: null });
+  const [nickname, setNickName] = useState({ value: "", err: null });
   const [password, setPassword] = useState({ value: "", err: null });
   const [confirmPassword, setConfirmPassword] = useState({
     value: "",
@@ -31,7 +31,7 @@ function Signup() {
   };
   const handleNickNameChange = (event) => {
     const inputNickname = event.target.value;
-    setEmail((prevNickname) => ({ ...prevNickname, value: inputNickname }));
+    setNickName((prevNickname) => ({ ...prevNickname, value: inputNickname }));
   };
 
   const handlePasswordChange = (event) => {
@@ -54,16 +54,19 @@ function Signup() {
     const doPasswordsMatch = password.value === confirmPassword.value;
 
     setEmail((prevEmail) => ({ ...prevEmail, err: !isEmailValid }));
-    setNickname((prevNickname) => ({ ...prevNickname, err: !isNicknameValid }));
+    setNickName((prevNickname) => ({ ...prevNickname, err: !isNicknameValid }));
     setPassword((prevPassword) => ({ ...prevPassword, err: !isPasswordValid }));
     setConfirmPassword((prevConfimPw) => ({
       ...prevConfimPw,
       err: !doPasswordsMatch,
     }));
 
-    return (
-      isEmailValid && isNicknameValid && isPasswordValid && doPasswordsMatch
-    );
+    return !isEmailValid ||
+      !isNicknameValid ||
+      !isPasswordValid ||
+      !doPasswordsMatch
+      ? false
+      : true;
   };
 
   const handleSubmit = async () => {
@@ -76,61 +79,62 @@ function Signup() {
           nickname: nickname.value,
           password: password.value,
         });
-        console.log(res);
+        alert(res.data.message)
       } catch (err) {
-        console.log(err);
+        alert(err.response.data.errorMessage);
       }
+      return;
     } else {
       return;
     }
   };
 
   return (
-      <StSignupContainer>
-        <h1>왕초 WORLD에 오신걸 환영합니다.</h1>
-        <label>
-          Email:
-          <StAlertBox>{email.err ? alertMessage.emailErr : null}</StAlertBox>
-        </label>
-        <Input type="text" placeholder="Email" onChange={handleEmailChange} />
-        <label>
-          Nickname:
-          <StAlertBox>
-            {nickname.err ? alertMessage.nicknameErr : null}
-          </StAlertBox>
-        </label>
-        <Input
-          type="text"
-          placeholder="Nickname"
-          onChange={handleNickNameChange}
-        />
-        <label>
-          Password:
-          <StAlertBox>{password.err ? alertMessage.pwErr : null}</StAlertBox>
-        </label>
-        <Input
-          type="password"
-          placeholder="Password"
-          onChange={handlePasswordChange}
-        />
-        <label>
-          Confirm Password:
-          <StAlertBox>
-            {confirmPassword.err ? alertMessage.pwmatchErr : null}
-          </StAlertBox>
-        </label>
-        <Input
-          type="password"
-          placeholder="Confirm Password"
-          onChange={handleConfirmPasswordChange}
-        />
-        <div>
-          <StBtn onClick={handleSubmit}>회원가입</StBtn>
-          <Link to={"/"}>
-            <StBtn>취소하기</StBtn>
-          </Link>
-        </div>
-      </StSignupContainer>
+    <StSignupContainer>
+      <h1>왕초 WORLD에 오신걸 환영합니다.</h1>
+      <label>
+        Email:
+        <StAlertBox>{email.err ? alertMessage.emailErr : null}</StAlertBox>
+      </label>
+      <Input type="text" placeholder="Email" onChange={handleEmailChange} />
+      <label>
+        Nickname:
+        <StAlertBox>
+          {nickname.err ? alertMessage.nicknameErr : null}
+        </StAlertBox>
+      </label>
+      <Input
+        type="text"
+        placeholder="Nickname"
+        onChange={handleNickNameChange}
+      />
+      <label>
+        Password:
+        <StAlertBox>{password.err ? alertMessage.pwErr : null}</StAlertBox>
+      </label>
+      <Input
+        type="password"
+        placeholder="Password"
+        onChange={handlePasswordChange}
+      />
+      <label>
+        Confirm Password:
+        <StAlertBox>
+          {confirmPassword.err ? alertMessage.pwmatchErr : null}
+        </StAlertBox>
+      </label>
+      <Input
+        type="password"
+        placeholder="Confirm Password"
+        onChange={handleConfirmPasswordChange}
+      />
+      <div>
+        <StBtn onClick={handleSubmit}>회원가입</StBtn>
+        <Link to={"/"}>
+          <StBtn>취소하기</StBtn>
+        </Link>
+      </div>
+    </StSignupContainer>
   );
 }
 export default Signup;
